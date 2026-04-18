@@ -105,6 +105,7 @@ struct LoginView: View {
                      LoginView()
                 }
             }
+            Spacer()
         }
     }
     

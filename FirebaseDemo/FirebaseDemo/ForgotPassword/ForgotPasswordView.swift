@@ -11,7 +11,7 @@ struct ForgotPasswordView: View {
     @State private var email: String = ""
     var body: some View {
         // Email Field
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 30) {
             TextField("Email", text: $email)
                 .keyboardType(.emailAddress)
                 .textInputAutocapitalization(.never)
@@ -35,6 +35,8 @@ struct ForgotPasswordView: View {
            // .disabled(!viewModel.isFormValid)
      
         }
+        .padding()
+        Spacer()
     }
 }
 
