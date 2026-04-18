@@ -35,6 +35,7 @@ struct ForgotPasswordView: View {
            // .disabled(!viewModel.isFormValid)
      
         }
+        .navigationTitle("Forgot Password")
         .padding()
         Spacer()
     }

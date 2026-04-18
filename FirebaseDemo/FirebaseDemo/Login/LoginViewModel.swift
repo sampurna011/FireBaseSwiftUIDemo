@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 
+@MainActor
 class LoginViewModel: ObservableObject {
     
     @Published  var email: String = ""
@@ -16,8 +17,6 @@ class LoginViewModel: ObservableObject {
     @Published  var emailError: String = ""
     @Published  var passwordError: String = ""
     @Published  var isFormValid: Bool = false
-    
-    
     
 }
 
@@ -59,4 +58,16 @@ extension LoginViewModel {
         return predicate.evaluate(with: email)
     }
     
+}
+
+
+extension LoginViewModel {
+    
+    func userLoginApiCall() async throws {
+      
+       let result =  try await AuthenticationManager.shared
+            .signInUser(email: email, password: password)
+        
+        print("Result \(result)")
+    }
 }

@@ -14,54 +14,54 @@ struct SignUpView: View {
     @State private var confirmPassword: String = ""
     @State private var errorMessage: String = ""
     
+    @StateObject var viewModel: SignUpViewModel = SignUpViewModel()
+    
     var body: some View {
-        VStack(spacing: 20) {
-            
-            Text("Sign Up")
-                .font(.largeTitle)
-                .bold()
-            
-            // Email
-            TextField("Email", text: $email)
-                .keyboardType(.emailAddress)
-                .autocapitalization(.none)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(8)
-            
-            // Password
-            SecureField("Password", text: $password)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(8)
-            
-            // Confirm Password
-            SecureField("Confirm Password", text: $confirmPassword)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(8)
-            
-            // Error Message
-            if !errorMessage.isEmpty {
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .font(.caption)
-            }
-            
-            // Sign Up Button
-            Button(action: {
-                validateAndSignup()
-            }) {
-                Text("Sign Up")
-                    .frame(maxWidth: .infinity)
+            VStack(spacing: 20) {
+              
+                // Email
+                TextField("Email", text: $email)
+                    .keyboardType(.emailAddress)
+                    .autocapitalization(.none)
                     .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
+                    .background(Color(.systemGray6))
                     .cornerRadius(8)
+                
+                // Password
+                SecureField("Password", text: $password)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+                
+                // Confirm Password
+                SecureField("Confirm Password", text: $confirmPassword)
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+                
+                // Error Message
+                if !errorMessage.isEmpty {
+                    Text(errorMessage)
+                        .foregroundColor(.red)
+                        .font(.caption)
+                }
+                
+                // Sign Up Button
+                Button(action: {
+                    validateAndSignup()
+                }) {
+                    Text("Sign Up")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                
             }
-            
-        }
-        .padding()
+            .padding()
+            .navigationTitle("Sign Up")
+        Spacer()
     }
     
     private func validateAndSignup() {
@@ -70,7 +70,7 @@ struct SignUpView: View {
         guard !email.isEmpty,
               !password.isEmpty,
               !confirmPassword.isEmpty else {
-            errorMessage = "All fields are required."
+              errorMessage = "All fields are required."
             return
         }
         
