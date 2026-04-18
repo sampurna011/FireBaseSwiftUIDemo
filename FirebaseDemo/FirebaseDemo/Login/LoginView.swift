@@ -12,9 +12,10 @@ import SwiftUI
 struct LoginView: View {
     
     @StateObject var viewModel: LoginViewModel = LoginViewModel()
+    @StateObject var router = AuthRouter()
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $router.path) {
             VStack(spacing: 20) {
                 // Email Field
                 VStack(alignment: .leading) {
@@ -93,6 +94,17 @@ struct LoginView: View {
             }
             .padding()
             .navigationTitle("Login")
+            .navigationDestination(for: AuthRoute.self) { type in
+                
+                switch type {
+                case .signup:
+                     SignUpView()
+                case .forgotPassword:
+                     ForgotPasswordView()
+                case .login:
+                     LoginView()
+                }
+            }
         }
     }
     
@@ -110,6 +122,7 @@ struct LoginView: View {
     
     func handleSignUp() {
         print("Navigate to Sign Up screen")
+        router.goToSignup()
     }
     
     func handleForgotPassword() {
@@ -120,5 +133,6 @@ struct LoginView: View {
 //        } else {
 //            print("Trigger forgot password for: \(email)")
 //        }
+        router.goToForgotPassword()
     }
 }
