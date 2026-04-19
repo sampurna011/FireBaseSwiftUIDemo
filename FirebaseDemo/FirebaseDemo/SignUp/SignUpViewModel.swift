@@ -9,10 +9,12 @@ import Foundation
 import SwiftUI
 import Combine
 
+@MainActor
 class SignUpViewModel: ObservableObject {
     
-    @Published private var email: String = ""
-    @Published private var password: String = ""
+    @Published var email: String = ""
+    @Published var password: String = ""
+    @Published var confirmPassword: String = ""
  
 }
 
@@ -20,10 +22,20 @@ extension SignUpViewModel {
     
     func userSignUpApiCall() async throws {
       
-        let result =  try await AuthenticationManager.shared.signInUser(
+        let result =  try await AuthenticationManager.shared.createUser(
             email: email,
             password: password
         )        
-        print("Result \(result)")
+        print("Sign up Result \(result)")
     }
+}
+
+
+extension SignUpViewModel {
+    
+    private func inputValidation() -> Bool {
+        
+        return true
+        
+    } 
 }

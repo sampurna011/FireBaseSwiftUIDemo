@@ -13,6 +13,14 @@ final class AuthenticationManager {
     static let shared = AuthenticationManager()
     private init() { }
     
+    // For get current user data
+    func getAuthenticUser() async throws -> AuthDataResultModel {
+        guard let user = Auth.auth().currentUser else {
+            throw URLError(.badServerResponse)
+        }
+        
+        return AuthDataResultModel(userData: user)
+    }
     
     func createUser(email: String, password: String) async throws -> AuthDataResultModel {
         
@@ -26,6 +34,11 @@ final class AuthenticationManager {
         let authDataResult =  try await Auth.auth().signIn(withEmail: email, password: password)
         return AuthDataResultModel(userData: authDataResult.user)
         
+    }
+    
+    // For Logout
+    func signOut() throws {
+        try Auth.auth().signOut()
     }
 }
 

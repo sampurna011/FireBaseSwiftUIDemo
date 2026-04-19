@@ -8,33 +8,51 @@
 import SwiftUI
 
 struct SignUpView: View {
-    
-    @State private var email: String = ""
-    @State private var password: String = ""
-    @State private var confirmPassword: String = ""
+ 
     @State private var errorMessage: String = ""
     
     @StateObject var viewModel: SignUpViewModel = SignUpViewModel()
+    
+    @State private var isValid = true
+    @State private var animate = false
     
     var body: some View {
             VStack(spacing: 20) {
               
                 // Email
-                TextField("Email", text: $email)
-                    .keyboardType(.emailAddress)
-                    .autocapitalization(.none)
+//                TextField("Email", text: $viewModel.email)
+//                    .keyboardType(.emailAddress)
+//                    .autocapitalization(.none)
+//                    .padding()
+//                    .background(Color(.systemGray6))
+//                    .cornerRadius(8)
+                
+                TextField("Enter value", text: $viewModel.email)
                     .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(borderColor, lineWidth: 2)
+                    )
+                    .onChange(of: viewModel.email) { oldValue, newValue in
+                        isValid = validate(newValue)
+                        
+                        if !isValid {
+                            startAnimation()
+                        } else {
+                            animate = false
+                        }
+                    }
+                    .padding()
+                
                 
                 // Password
-                SecureField("Password", text: $password)
+                SecureField("Password", text: $viewModel.password)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
                 
                 // Confirm Password
-                SecureField("Confirm Password", text: $confirmPassword)
+                SecureField("Confirm Password", text: $viewModel.confirmPassword)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
@@ -67,26 +85,54 @@ struct SignUpView: View {
     private func validateAndSignup() {
         errorMessage = ""
         
-        guard !email.isEmpty,
-              !password.isEmpty,
-              !confirmPassword.isEmpty else {
+        guard !viewModel.email.isEmpty,
+              !viewModel.password.isEmpty,
+              !viewModel.confirmPassword.isEmpty else {
               errorMessage = "All fields are required."
             return
         }
         
-        guard password == confirmPassword else {
+        guard viewModel.password == viewModel.confirmPassword else {
             errorMessage = "Passwords do not match."
             return
         }
         
-        guard password.count >= 6 else {
+        guard viewModel.password.count >= 6 else {
             errorMessage = "Password must be at least 6 characters."
             return
         }
-        
-        // Proceed with signup logic (API call, etc.)
-        print("Signing up with email: \(email)")
+                
+        Task {
+            do {
+                try await viewModel.userSignUpApiCall() 
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+           
+        }
     }
+    
+    
+    var borderColor: Color {
+           if isValid {
+               return .gray
+           } else {
+               return animate ? .red : .orange
+           }
+       }
+
+       func startAnimation() {
+           withAnimation(
+               .easeInOut(duration: 0.4)
+               .repeatForever(autoreverses: true)
+           ) {
+               animate = true
+           }
+       }
+
+       func validate(_ value: String) -> Bool {
+           value.count >= 5
+       }
 }
 
 #Preview {
