@@ -34,3 +34,9 @@ enum AuthRoute: Hashable {
     case signup
     case forgotPassword
 }
+
+
+enum RootFlow {
+    case authFlow
+    case tabBarFlow
+}

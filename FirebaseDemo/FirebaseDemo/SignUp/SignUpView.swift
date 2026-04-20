@@ -12,39 +12,19 @@ struct SignUpView: View {
     @State private var errorMessage: String = ""
     
     @StateObject var viewModel: SignUpViewModel = SignUpViewModel()
-    
-    @State private var isValid = true
-    @State private var animate = false
+
     
     var body: some View {
             VStack(spacing: 20) {
               
                 // Email
-//                TextField("Email", text: $viewModel.email)
-//                    .keyboardType(.emailAddress)
-//                    .autocapitalization(.none)
-//                    .padding()
-//                    .background(Color(.systemGray6))
-//                    .cornerRadius(8)
-                
-                TextField("Enter value", text: $viewModel.email)
+                TextField("Email", text: $viewModel.email)
+                    .keyboardType(.emailAddress)
+                    .autocapitalization(.none)
                     .padding()
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(borderColor, lineWidth: 2)
-                    )
-                    .onChange(of: viewModel.email) { oldValue, newValue in
-                        isValid = validate(newValue)
-                        
-                        if !isValid {
-                            startAnimation()
-                        } else {
-                            animate = false
-                        }
-                    }
-                    .padding()
-                
-                
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+       
                 // Password
                 SecureField("Password", text: $viewModel.password)
                     .padding()
@@ -111,28 +91,6 @@ struct SignUpView: View {
            
         }
     }
-    
-    
-    var borderColor: Color {
-           if isValid {
-               return .gray
-           } else {
-               return animate ? .red : .orange
-           }
-       }
-
-       func startAnimation() {
-           withAnimation(
-               .easeInOut(duration: 0.4)
-               .repeatForever(autoreverses: true)
-           ) {
-               animate = true
-           }
-       }
-
-       func validate(_ value: String) -> Bool {
-           value.count >= 5
-       }
 }
 
 #Preview {
